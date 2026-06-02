@@ -6,9 +6,11 @@
  *   if r < 0x0590 || r > 0x05c7 || (r > 0x05bd && r < 0x05bf) { keep }
  *
  * In other words, keep every rune EXCEPT those in the Hebrew points/accents
- * block U+0590..U+05C7. The single carve-out `r > 0x05bd && r < 0x05bf` spares
- * only U+05BE (MAQAF); U+05BF (RAFE) is NOT spared and is stripped. Letters
- * (U+05D0..U+05EA), punctuation and everything outside the block pass through.
+ * block U+0590..U+05C7, sparing only U+05BE (MAQAF). The Go original writes the
+ * carve-out as the range `r > 0x05bd && r < 0x05bf`, which admits exactly the
+ * single code point 0x05BE, so we write it as `r === 0x05be` for clarity. Note
+ * U+05BF (RAFE) is NOT spared and is stripped. Letters (U+05D0..U+05EA),
+ * punctuation and everything outside the block pass through.
  *
  * Keeping this identical to the Go implementation guarantees the baked
  * he-x-NoNikud catalogue matches what hebcal-go produced at runtime.
@@ -17,7 +19,7 @@ export function stripNikud(str: string): string {
   let out = '';
   for (const ch of str) {
     const r = ch.codePointAt(0)!;
-    if (r < 0x0590 || r > 0x05c7 || (r > 0x05bd && r < 0x05bf)) {
+    if (r < 0x0590 || r > 0x05c7 || r === 0x05be) {
       out += ch;
     }
   }
