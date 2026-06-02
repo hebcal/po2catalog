@@ -138,7 +138,7 @@ function writeGoMod(outDir: string): void {
   // own go.mod still targets 1.18 (v0.23.0+ jump to 1.23/1.24/1.25). The
   // generated code uses only long-stable x/text APIs, so this keeps the eventual
   // hebcal-go bump minimal (1.17 -> 1.18) rather than forcing a modern toolchain.
-  const goMod = `module github.com/hebcal/locales/generated
+  const goMod = `module github.com/hebcal/po2catalog/generated
 
 go 1.18
 
