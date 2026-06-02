@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "description": "Generate Go golang.org/x/text message catalogues from Hebcal gettext .po files",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hebcal/po2catalog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hebcal/po2catalog/issues"
+  },
+  "homepage": "https://github.com/hebcal/po2catalog#readme",
   "bin": {
     "po2catalog": "./dist/cli.js"
   },
