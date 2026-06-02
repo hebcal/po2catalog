@@ -1,0 +1,25 @@
+{
+  "name": "@hebcal/po2catalog",
+  "version": "1.0.0",
+  "description": "Generate Go golang.org/x/text message catalogues from Hebcal gettext .po files",
+  "type": "module",
+  "bin": {
+    "po2catalog": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "generate": "tsx src/cli.ts",
+    "verify": "tsx src/cli.ts --config repos.json --out generated --test && cd generated && go mod tidy && go test ./...",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "license": "GPL-2.0",
+  "dependencies": {
+    "gettext-parser": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/gettext-parser": "^4.0.4",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

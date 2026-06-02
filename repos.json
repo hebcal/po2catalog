@@ -1,0 +1,11 @@
+{
+  "base": "..",
+  "poDir": "po",
+  "repos": [
+    "hdate-js",
+    "hebcal-es6",
+    "hebcal-locales",
+    "hebcal-leyning",
+    "hebcal-learning"
+  ]
+}
