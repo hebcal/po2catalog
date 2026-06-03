@@ -24,7 +24,7 @@ interface Args {
 }
 
 function parseArgs(argv: string[]): Args {
-  const args: Args = {out: 'generated', pkg: 'locales', withTest: false, poPaths: []};
+  const args: Args = {out: '../locales', pkg: 'locales', withTest: false, poPaths: []};
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     switch (a) {
@@ -51,7 +51,7 @@ catalogue as Go source.
 Options:
   --config <file>   JSON listing repos to scan (see repos.json)
   --base <dir>      Override the config's base directory
-  --out <dir>       Output directory for generated Go (default: generated)
+  --out <dir>       Output directory for generated Go (default: ../locales)
   --package <name>  Go package name (default: locales)
   --test            Also emit a self-checking _test.go and a go.mod
   -h, --help        Show this help
@@ -138,7 +138,7 @@ function writeGoMod(outDir: string): void {
   // own go.mod still targets 1.18 (v0.23.0+ jump to 1.23/1.24/1.25). The
   // generated code uses only long-stable x/text APIs, so this keeps the eventual
   // hebcal-go bump minimal (1.17 -> 1.18) rather than forcing a modern toolchain.
-  const goMod = `module github.com/hebcal/po2catalog/generated
+  const goMod = `module github.com/hebcal/locales
 
 go 1.18
 
