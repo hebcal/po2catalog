@@ -127,3 +127,17 @@ func TestPassthroughAndMissing(t *testing.T) {
 		t.Errorf("missing key = %q, %v; want key, false", got, ok)
 	}
 }
+
+func TestHebrewStripNikud(t *testing.T) {
+	cases := []struct{ in, want string }{
+		{"\u05d9\u05b4\u05e9\u05c2\u05b0\u05e8\u05b8\u05d0\u05b5\u05dc", "\u05d9\u05e9\u05e8\u05d0\u05dc"}, // israel: niqqud stripped
+		{"\u05d0\u05beb", "\u05d0\u05beb"},     // maqaf (U+05BE) kept
+		{"\u05d0\u05bf\u05d1", "\u05d0\u05d1"}, // rafe (U+05BF) stripped
+		{"Shabbat Shalom", "Shabbat Shalom"},   // non-Hebrew untouched
+	}
+	for _, c := range cases {
+		if got := HebrewStripNikud(c.in); got != c.want {
+			t.Errorf("HebrewStripNikud(%q) = %q; want %q", c.in, got, c.want)
+		}
+	}
+}

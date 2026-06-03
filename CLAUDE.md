@@ -50,8 +50,9 @@ Pipeline, one module per stage (`src/`):
    ordering. **Single source of truth**, emitted verbatim into `catalog.go`.
 4. **`nikud.ts`** — `stripNikud`, a faithful port of hebcal-go's
    `HebrewStripNikkud` (rune range U+0590–U+05C7, sparing only U+05BE MAQAF).
-5. **`goEmit.ts`** — generates `catalog.go`, per-locale `strings_*.go`, and an
-   optional self-checking `catalog_generated_test.go`.
+5. **`goEmit.ts`** — generates `catalog.go`, `nikud.go` (the public
+   `HebrewStripNikud` helper), per-locale `strings_*.go`, and an optional
+   self-checking `catalog_generated_test.go`.
 
 ## Non-obvious invariants (don't break these)
 
@@ -63,7 +64,9 @@ Pipeline, one module per stage (`src/`):
   variant, add it to `LOCALES` with a tag whose subtags fit.
 - **`he-x-NoNikud` is baked**, not stripped at runtime: built from the full `he`
   dict with `stripNikud` applied, then explicit `he-x-NoNikud.po` overrides on
-  top. Keep `nikud.ts` byte-identical in behaviour to the Go original.
+  top. Keep `nikud.ts` byte-identical in behaviour to the Go original. The same
+  transform is also emitted to Go as the exported `HebrewStripNikud` in
+  `nikud.go` (twin of `nikud.ts`); keep all three in lockstep.
 - **`ok` bool relies on dropping identity translations.** Because the catalogue
   never stores `msgstr == msgid`, the generated `LookupTranslation` treats
   `Sprintf(key) == key` as "not found". Don't stop dropping identity entries

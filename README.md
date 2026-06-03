@@ -66,7 +66,9 @@ independent dictionary.
 - **`he-x-NoNikud` is baked.** Its dictionary is built by stripping niqqud from
   every `he` entry (via a faithful port of hebcal-go's `HebrewStripNikkud`,
   see `src/nikud.ts`), then layering the explicit `he-x-NoNikud.po` overrides on
-  top. No runtime niqqud stripping is needed.
+  top. No runtime niqqud stripping is needed. The same transform is also exported
+  from the generated package as **`HebrewStripNikud(s string) string`** (in
+  `nikud.go`), so callers can strip niqqud from arbitrary strings at runtime.
 - **`%`-bearing msgids are dropped.** Hebcal does not use these format strings
   in practice, and dropping them keeps every catalogue entry safe to retrieve
   through `message.Printer.Sprintf` without format-verb surprises.
@@ -101,7 +103,7 @@ src/
   poReader.ts   parse + merge .po files (gettext-parser)
   localeMap.ts  locale name <-> BCP-47 tag mapping; AllLocales order
   nikud.ts      HebrewStripNikkud port
-  goEmit.ts     Go code generation (catalog.go, strings_*.go, _test.go)
+  goEmit.ts     Go code generation (catalog.go, nikud.go, strings_*.go, _test.go)
 test/           unit tests (niqqud, Go quoting)
 repos.json      which repos/po dirs to scan
 ```

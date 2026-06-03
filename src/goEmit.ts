@@ -90,6 +90,40 @@ function emitStringsFile(pkg: string, def: LocaleDef, dict: Dict): string {
   return lines.join('\n');
 }
 
+/**
+ * Emit nikud.go exposing the public HebrewStripNikud helper. This is the Go
+ * twin of src/nikud.ts (and of hebcal-go's HebrewStripNikkud): the same
+ * transform used to bake the he-x-NoNikud catalogue, exported so callers can
+ * strip niqqud from arbitrary strings at runtime.
+ */
+function emitNikudFile(pkg: string): string {
+  return `${HEADER}
+
+package ${pkg}
+
+import "strings"
+
+// HebrewStripNikud removes Hebrew niqqud (vowel points) and cantillation marks
+// from s. It keeps every rune except those in the Hebrew points/accents block
+// U+0590..U+05C7, sparing only U+05BE (MAQAF); note U+05BF (RAFE) is stripped.
+// Letters, punctuation and everything outside that block pass through.
+//
+// This matches hebcal-go's HebrewStripNikkud and is the same transform used to
+// bake the he-x-NoNikud dictionary, so stripping a he entry at runtime yields
+// the catalogue's he-x-NoNikud value.
+func HebrewStripNikud(s string) string {
+\tvar b strings.Builder
+\tb.Grow(len(s))
+\tfor _, r := range s {
+\t\tif r < 0x0590 || r > 0x05c7 || r == 0x05be {
+\t\t\tb.WriteRune(r)
+\t\t}
+\t}
+\treturn b.String()
+}
+`;
+}
+
 /** Emit catalog.go with the builder, tag vars, AllLocales and LookupTranslation. */
 function emitCatalogFile(pkg: string): string {
   const tagDecls = LOCALES.map(
@@ -218,6 +252,20 @@ func TestPassthroughAndMissing(t *testing.T) {
 \t\tt.Errorf("missing key = %q, %v; want key, false", got, ok)
 \t}
 }
+
+func TestHebrewStripNikud(t *testing.T) {
+\tcases := []struct{ in, want string }{
+\t\t{"\\u05d9\\u05b4\\u05e9\\u05c2\\u05b0\\u05e8\\u05b8\\u05d0\\u05b5\\u05dc", "\\u05d9\\u05e9\\u05e8\\u05d0\\u05dc"}, // israel: niqqud stripped
+\t\t{"\\u05d0\\u05beb", "\\u05d0\\u05beb"}, // maqaf (U+05BE) kept
+\t\t{"\\u05d0\\u05bf\\u05d1", "\\u05d0\\u05d1"}, // rafe (U+05BF) stripped
+\t\t{"Shabbat Shalom", "Shabbat Shalom"}, // non-Hebrew untouched
+\t}
+\tfor _, c := range cases {
+\t\tif got := HebrewStripNikud(c.in); got != c.want {
+\t\t\tt.Errorf("HebrewStripNikud(%q) = %q; want %q", c.in, got, c.want)
+\t\t}
+\t}
+}
 `;
 }
 
@@ -236,6 +284,7 @@ export function emitGo(catalog: Catalog, opts: EmitOptions): Map<string, string>
   const files = new Map<string, string>();
 
   files.set('catalog.go', emitCatalogFile(opts.pkg));
+  files.set('nikud.go', emitNikudFile(opts.pkg));
 
   for (const def of LOCALES) {
     const dict = baked.get(def.name) ?? new Map();
