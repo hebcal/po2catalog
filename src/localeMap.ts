@@ -12,7 +12,16 @@
  *     "ashkenazi" is 9 characters, exceeding the 8-character limit for a
  *     private-use subtag, so even "x-ashkenazi" fails to parse. We therefore
  *     map each to a hand-picked private-use tag whose subtags are all <= 8
- *     chars, anchored on "he" (the underlying content is Hebrew, romanised).
+ *     chars, anchored on "und" (undetermined).
+ *
+ *     They MUST anchor on "und", not "he": golang.org/x/text/language treats
+ *     "he-x-ashkenaz" as a child of "he", so a message.Printer for that tag
+ *     falls back to the Hebrew catalogue for any key lacking an ashkenazi
+ *     translation. That regresses the original behaviour, where a missing
+ *     ashkenazi key fell back to the English key, not to Hebrew. Anchoring on
+ *     "und" gives the ashkenazi tags no parent dictionary, so a missing key
+ *     yields Sprintf(key) == key and LookupTranslation correctly reports
+ *     "not found" (returning the English key with ok == false).
  *
  * The mapping is the single source of truth shared by the generator and, in a
  * later phase, by hebcal-go's LookupTranslation. Both sides MUST agree on it,
@@ -38,14 +47,14 @@ export const PASSTHROUGH_LOCALES = ['en', 'sephardic'] as const;
  * AllLocales. "en" is prepended to AllLocales separately (it is pass-through).
  */
 export const LOCALES: readonly LocaleDef[] = [
-  {name: 'ashkenazi', tag: 'he-x-ashkenaz'},
+  {name: 'ashkenazi', tag: 'und-x-ashkenaz'},
   {name: 'he', tag: 'he'},
   {name: 'he-x-NoNikud', tag: 'he-x-nonikud'},
-  {name: 'ashkenazi_komatz', tag: 'he-x-ashk-komatz'},
-  {name: 'ashkenazi_litvish', tag: 'he-x-ashk-litvish'},
-  {name: 'ashkenazi_poylish', tag: 'he-x-ashk-poylish'},
-  {name: 'ashkenazi_romanian', tag: 'he-x-ashk-romanian'},
-  {name: 'ashkenazi_standard', tag: 'he-x-ashk-standard'},
+  {name: 'ashkenazi_komatz', tag: 'und-x-ashk-komatz'},
+  {name: 'ashkenazi_litvish', tag: 'und-x-ashk-litvish'},
+  {name: 'ashkenazi_poylish', tag: 'und-x-ashk-poylish'},
+  {name: 'ashkenazi_romanian', tag: 'und-x-ashk-romanian'},
+  {name: 'ashkenazi_standard', tag: 'und-x-ashk-standard'},
   {name: 'de', tag: 'de'},
   {name: 'es', tag: 'es'},
   {name: 'fi', tag: 'fi'},

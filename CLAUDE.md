@@ -58,9 +58,16 @@ Pipeline, one module per stage (`src/`):
 - **Locale → tag mapping.** `golang.org/x/text/language` is strict BCP-47.
   `he-x-NoNikud` is valid (normalises to `he-x-nonikud`). The `ashkenazi*` names
   are **not** — `ashkenazi` is 9 chars, over the 8-char private-use subtag limit,
-  so it must be mapped to a hand-picked private-use tag (`he-x-ashkenaz`,
-  `he-x-ashk-litvish`, …), each subtag ≤ 8 chars. If you add an Ashkenazi
+  so it must be mapped to a hand-picked private-use tag (`und-x-ashkenaz`,
+  `und-x-ashk-litvish`, …), each subtag ≤ 8 chars. If you add an Ashkenazi
   variant, add it to `LOCALES` with a tag whose subtags fit.
+- **Ashkenazi tags anchor on `und`, not `he`.** `x/text/language` treats
+  `he-x-ashkenaz` as a child of `he`, so a printer for that tag falls back to the
+  Hebrew catalogue for any key without an Ashkenazi translation — a regression
+  from the original, where a missing Ashkenazi key falls back to the English key.
+  `und-x-…` has no parent dictionary, so a missing key gives `Sprintf(key) == key`
+  and `LookupTranslation` reports "not found" (English key, `ok == false`). Don't
+  move these back under `he`.
 - **`he-x-NoNikud` is baked**, not stripped at runtime: built from the full `he`
   dict with `stripNikud` applied, then explicit `he-x-NoNikud.po` overrides on
   top. Keep `nikud.ts` byte-identical in behaviour to the Go original.

@@ -50,16 +50,24 @@ into the generated `catalog.go` (and is intended to be shared with hebcal-go).
 | -------------------- | --------------------- | --- |
 | `he`, `es`, `fr`, …  | unchanged             | already valid BCP-47 |
 | `he-x-NoNikud`       | `he-x-nonikud`        | valid BCP-47 private use (just lowercased) |
-| `ashkenazi`          | `he-x-ashkenaz`       | `ashkenazi` is 9 chars > the 8-char private-use subtag limit, so it cannot be parsed directly |
-| `ashkenazi_litvish`  | `he-x-ashk-litvish`   | hand-picked private-use subtags, each ≤ 8 chars |
-| `ashkenazi_komatz`   | `he-x-ashk-komatz`    | |
-| `ashkenazi_poylish`  | `he-x-ashk-poylish`   | |
-| `ashkenazi_romanian` | `he-x-ashk-romanian`  | |
-| `ashkenazi_standard` | `he-x-ashk-standard`  | |
+| `ashkenazi`          | `und-x-ashkenaz`      | `ashkenazi` is 9 chars > the 8-char private-use subtag limit, so it cannot be parsed directly |
+| `ashkenazi_litvish`  | `und-x-ashk-litvish`  | hand-picked private-use subtags, each ≤ 8 chars |
+| `ashkenazi_komatz`   | `und-x-ashk-komatz`   | |
+| `ashkenazi_poylish`  | `und-x-ashk-poylish`  | |
+| `ashkenazi_romanian` | `und-x-ashk-romanian` | |
+| `ashkenazi_standard` | `und-x-ashk-standard` | |
 
 These private-use tags parse cleanly and stay distinct from `he` (no accidental
 fallback), matching the current behaviour where each Ashkenazi locale is an
 independent dictionary.
+
+The Ashkenazi tags anchor on `und` (undetermined), **not** `he`. With `he-x-…`,
+`golang.org/x/text/language` treats the tag as a child of `he`, so a printer for
+an Ashkenazi locale falls back to the Hebrew catalogue for any key without an
+Ashkenazi translation — regressing the original behaviour, where a missing
+Ashkenazi key falls back to the English key. Anchoring on `und` gives these tags
+no parent dictionary, so a missing key yields `Sprintf(key) == key` and
+`LookupTranslation` correctly reports "not found".
 
 ## Notable behaviours
 

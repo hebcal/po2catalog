@@ -6,7 +6,7 @@
 
 package locales
 
-// Translations for ashkenazi_romanian (217 entries) -> tag he-x-ashk-romanian
+// Translations for ashkenazi_romanian (217 entries) -> tag und-x-ashk-romanian
 func init() {
 	Catalog.SetString(tag_ashkenazi_romanian, "Achrei Mot", "Aĥrei Mot")
 	Catalog.SetString(tag_ashkenazi_romanian, "Adar", "Odor")

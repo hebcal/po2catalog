@@ -6,7 +6,7 @@
 
 package locales
 
-// Translations for ashkenazi (116 entries) -> tag he-x-ashkenaz
+// Translations for ashkenazi (116 entries) -> tag und-x-ashkenaz
 func init() {
 	Catalog.SetString(tag_ashkenazi, "Achrei Mot", "Achrei Mos")
 	Catalog.SetString(tag_ashkenazi, "Alot HaShachar", "Alos HaShachar")
