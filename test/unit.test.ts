@@ -2,6 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {stripNikud} from '../src/nikud.js';
 import {goQuote} from '../src/goEmit.js';
+import {LOCALES} from '../src/localeMap.js';
 
 test('stripNikud removes vowel points and accents', () => {
   // יִשְׂרָאֵל (with niqqud) -> ישראל (bare letters)
@@ -17,6 +18,24 @@ test('stripNikud preserves maqaf (U+05BE) but strips rafe (U+05BF)', () => {
 
 test('stripNikud leaves non-Hebrew untouched', () => {
   assert.equal(stripNikud('Shabbat Shalom'), 'Shabbat Shalom');
+});
+
+test('ashkenazi tags anchor on und, never he', () => {
+  // he-x-* would make x/text treat these as children of "he", so a missing
+  // ashkenazi key would wrongly fall back to the Hebrew catalogue instead of
+  // the English key. They must anchor on the neutral "und" root.
+  const ashkenazi = LOCALES.filter((l) => l.name.startsWith('ashkenazi'));
+  assert.ok(ashkenazi.length > 0, 'expected ashkenazi locales');
+  for (const l of ashkenazi) {
+    assert.ok(
+      l.tag.startsWith('und-x-'),
+      `${l.name} should map to an und-x-* tag, got ${l.tag}`,
+    );
+    // Every private-use subtag must still fit BCP-47's 8-char limit.
+    for (const sub of l.tag.split('-')) {
+      assert.ok(sub.length <= 8, `subtag ${sub} of ${l.tag} exceeds 8 chars`);
+    }
+  }
 });
 
 test('goQuote escapes special characters', () => {

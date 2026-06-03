@@ -6,7 +6,7 @@
 
 package locales
 
-// Translations for ashkenazi_poylish (162 entries) -> tag he-x-ashk-poylish
+// Translations for ashkenazi_poylish (162 entries) -> tag und-x-ashk-poylish
 func init() {
 	Catalog.SetString(tag_ashkenazi_poylish, "Achrei Mot", "Achrai")
 	Catalog.SetString(tag_ashkenazi_poylish, "Adar", "Odor")
