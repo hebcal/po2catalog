@@ -1,9 +1,5 @@
 # @hebcal/po2catalog
 
-[![Build Status](https://github.com/hebcal/po2catalog/actions/workflows/ci.yml/badge.svg)](https://github.com/hebcal/po2catalog/actions/workflows/ci.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/hebcal/po2catalog/generated)](https://goreportcard.com/report/github.com/hebcal/po2catalog/generated)
-[![GoDoc](https://pkg.go.dev/badge/github.com/hebcal/po2catalog/generated?status.svg)](https://pkg.go.dev/github.com/hebcal/po2catalog/generated)
-
 Generate Go [`golang.org/x/text/message/catalog`](https://pkg.go.dev/golang.org/x/text/message/catalog)
 source from Hebcal's gettext `.po` files.
 
