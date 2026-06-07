@@ -70,6 +70,13 @@ Pipeline, one module per stage (`src/`):
   `und-x-…` has no parent dictionary, so a missing key gives `Sprintf(key) == key`
   and `LookupTranslation` reports "not found" (English key, `ok == false`). Don't
   move these back under `he`.
+- **`Tamuz` is aliased to the canonical `Tammuz`.** Source `.po` files often
+  spell the month with one `m` (e.g. Russian `msgid "Tamuz"` / `msgstr "Тамуз"`),
+  but Go's canonical key is `Tammuz`. `poReader.ts` therefore emits a second
+  entry for every `Tamuz`-bearing msgid under the `Tammuz` spelling (same
+  translation, applied inside compound keys like `Rosh Chodesh Tamuz` too), so
+  both `SetString` calls land. An explicit `Tammuz` translation already in a `.po`
+  is never clobbered by the alias.
 - **`he-x-NoNikud` is baked**, not stripped at runtime: built from the full `he`
   dict with `stripNikud` applied, then explicit `he-x-NoNikud.po` overrides on
   top. Keep `nikud.ts` byte-identical in behaviour to the Go original.

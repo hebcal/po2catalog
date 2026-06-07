@@ -29,6 +29,10 @@ export function localeNameFromPath(poPath: string): string {
  *   - the translation equals the source (no-op), or
  *   - the msgid contains '%' (Hebcal does not use these format strings, and
  *     dropping them keeps the catalogue safe for message.Printer retrieval).
+ *
+ * As entries are added, any msgid spelling the month as "Tamuz" also gets an
+ * aliased entry under the canonical "Tammuz" spelling (same translation), so
+ * lookups succeed regardless of which spelling the caller uses.
  */
 export function readPoFiles(poPaths: string[], opts: ReadOptions = {}): Catalog {
   const warn = opts.warn ?? (() => {});
@@ -59,6 +63,11 @@ export function readPoFiles(poPaths: string[], opts: ReadOptions = {}): Catalog 
       if (msgid.includes('%')) continue;
       if (msgstr === msgid) continue;
       dict.set(msgid, msgstr);
+      // Canonical spelling in Go is "Tammuz"; source .po files often use the
+      // single-m "Tamuz". Alias every "Tamuz" key to "Tammuz" with the same
+      // translation so callers can look up either spelling.
+      const aliased = msgid.replace(/Tamuz/g, 'Tammuz');
+      if (aliased !== msgid && !dict.has(aliased)) dict.set(aliased, msgstr);
     }
   }
 
