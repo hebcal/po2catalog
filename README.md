@@ -14,7 +14,7 @@ lookups through a `message.Printer`, while preserving the existing
 ```sh
 npm install
 
-# Scan the repos listed in repos.json (expects sibling checkouts under ../)
+# Read the .po files from the installed @hebcal/* npm packages in repos.json
 npm run generate -- --out generated
 
 # Or point at explicit .po files / directories
@@ -29,12 +29,15 @@ directory and formatted with `gofmt` if it is on `PATH`. With `--test`, a
 `go.mod` and a `catalog_generated_test.go` are also emitted so the output
 builds and round-trips standalone.
 
-### Input repos
+### Input packages
 
-`.po` files are gathered from five repos (configurable in `repos.json`):
-`hdate-js`, `hebcal-es6`, `hebcal-locales`, `hebcal-leyning`, `hebcal-learning`.
-The same locale (e.g. `he`, `ashkenazi`) appears in several repos; all files
-for a locale are **merged**, with later files overriding earlier duplicates.
+`.po` files are read from the `po/` directory of five installed npm packages
+(configurable in `repos.json`): `@hebcal/hdate`, `@hebcal/core`,
+`@hebcal/locales`, `@hebcal/leyning`, `@hebcal/learning` — added as
+devDependencies so `npm install` pins exact versions. Those versions are
+recorded in the header of every generated `.go` file. The same locale (e.g.
+`he`, `ashkenazi`) appears in several packages; all files for a locale are
+**merged**, with later files overriding earlier duplicates.
 
 ## How locales map to BCP-47 tags
 

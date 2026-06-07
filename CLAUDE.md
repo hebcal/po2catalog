@@ -39,12 +39,14 @@ cd <outdir> && GOTOOLCHAIN=local go test ./...
 
 Pipeline, one module per stage (`src/`):
 
-1. **`cli.ts`** — arg/`repos.json` handling; gathers `.po` paths, runs the
+1. **`cli.ts`** — arg/`repos.json` handling; resolves each named `@hebcal/*` npm
+   package under `node_modules`, gathers its `po/*.po` paths and reads its
+   version from `package.json` (recorded in the generated file header), runs the
    pipeline, writes files, runs `gofmt -w` (best-effort), and on `--test` emits
    a `go.mod`.
 2. **`poReader.ts`** — parses with `gettext-parser` and **merges per locale**.
-   The same locale (e.g. `he`, `ashkenazi`) lives in multiple repos; entries are
-   merged with later files overriding earlier. Drops: empty msgid/msgstr,
+   The same locale (e.g. `he`, `ashkenazi`) lives in multiple packages; entries
+   are merged with later files overriding earlier. Drops: empty msgid/msgstr,
    identity translations (`msgstr == msgid`), and **any msgid containing `%`**.
 3. **`localeMap.ts`** — the locale-name ⇄ BCP-47 tag mapping and `AllLocales`
    ordering. **Single source of truth**, emitted verbatim into `catalog.go`.
@@ -93,4 +95,7 @@ need 1.23–1.25. hebcal-go is on go 1.17 with no `x/text` dep, so the emitted
 
 - Old generator: `hebcal/hebcal-locales` → `po2golang.js`
 - Target lookup + niqqud source: `hebcal/hebcal-go` → `locales/locales.go`, `locales/nikud.go`
-- `.po` sources: `hdate-js`, `hebcal-es6`, `hebcal-locales`, `hebcal-leyning`, `hebcal-learning` (each under `po/`)
+- `.po` sources: read from the installed npm packages (`po/` in each), pinned as
+  devDependencies — `@hebcal/hdate` (hdate-js), `@hebcal/core` (hebcal-es6),
+  `@hebcal/locales` (hebcal-locales), `@hebcal/leyning` (hebcal-leyning),
+  `@hebcal/learning` (hebcal-learning)
