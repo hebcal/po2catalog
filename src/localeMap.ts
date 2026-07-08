@@ -44,9 +44,10 @@ export const PASSTHROUGH_LOCALES = ['en', 'sephardic'] as const;
 
 /**
  * All dictionary-bearing locales, in the priority order hebcal-go uses for
- * AllLocales. "en" is prepended to AllLocales separately (it is pass-through).
+ * AllLocales.
  */
 export const LOCALES: readonly LocaleDef[] = [
+  {name: 'en', tag: 'en'},
   {name: 'ashkenazi', tag: 'und-x-ashkenaz'},
   {name: 'he', tag: 'he'},
   {name: 'he-x-NoNikud', tag: 'he-x-nonikud'},
@@ -84,5 +85,5 @@ export function localeByName(name: string): LocaleDef | undefined {
 
 /** Full AllLocales ordering, matching hebcal-go (en first, then dictionaries). */
 export function allLocaleNames(): string[] {
-  return ['en', ...LOCALES.map((l) => l.name)];
+  return [...LOCALES.map((l) => l.name)];
 }

@@ -1,6 +1,6 @@
 {
   "name": "@hebcal/po2catalog",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Generate Go golang.org/x/text message catalogues from Hebcal gettext .po files",
   "type": "module",
   "repository": {
@@ -22,17 +22,18 @@
   },
   "license": "BSD-2-Clause",
   "dependencies": {
-    "gettext-parser": "^9.0.2"
+    "gettext-parser": "^9.1.1"
   },
   "devDependencies": {
-    "@hebcal/core": "^6.5.3",
-    "@hebcal/hdate": "^0.22.4",
+    "@hebcal/core": "^6.6.0",
+    "@hebcal/hdate": "^0.22.5",
     "@hebcal/learning": "^6.9.5",
     "@hebcal/leyning": "^9.5.5",
-    "@hebcal/locales": "^6.5.0",
+    "@hebcal/locales": "^6.5.1",
+    "@hebcal/rest-api": "^6.5.1",
     "@types/gettext-parser": "^9.0.0",
-    "@types/node": "^25.9.2",
-    "tsx": "^4.22.4",
+    "@types/node": "^26.1.0",
+    "tsx": "^4.23.0",
     "typescript": "^6.0.3"
   }
 }

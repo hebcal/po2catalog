@@ -172,14 +172,14 @@ func getPrinter(locale string) (*message.Printer, bool) {
 // LookupTranslation returns the translated message for key in the given locale.
 // It returns ok=false when no translation exists (the key is returned as-is).
 //
-// "en", "sephardic" and "" are pass-through locales. For dictionary locales,
+// "sephardic" and "" are aliases for the "en" locale. For dictionary locales,
 // the catalogue never stores identity translations, so a Sprintf result equal
 // to the key reliably means "not found".
 func LookupTranslation(key string, locale string) (string, bool) {
 \tlang := strings.ToLower(locale)
 \tswitch lang {
-\tcase "", "en", "sephardic":
-\t\treturn key, true
+\tcase "", "sephardic":
+\t\tlang = "en"
 \t}
 \tp, ok := getPrinter(lang)
 \tif !ok {

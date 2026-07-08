@@ -5,6 +5,7 @@
     "@hebcal/core",
     "@hebcal/locales",
     "@hebcal/leyning",
+    "@hebcal/rest-api",
     "@hebcal/learning"
   ]
 }
