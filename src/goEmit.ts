@@ -186,7 +186,7 @@ func LookupTranslation(key string, locale string) (string, bool) {
 \t\treturn key, false
 \t}
 \ts := p.Sprintf(key)
-\tif s == key && lang == "en" {
+\tif s == key && lang == "en" && !strings.HasPrefix(key, "MEMO:") {
 \t\treturn key, true
 \t}
 \tif s == key {
