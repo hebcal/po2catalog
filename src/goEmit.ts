@@ -186,6 +186,9 @@ func LookupTranslation(key string, locale string) (string, bool) {
 \t\treturn key, false
 \t}
 \ts := p.Sprintf(key)
+\tif s == key && lang == "en" {
+\t\treturn key, true
+\t}
 \tif s == key {
 \t\treturn key, false
 \t}

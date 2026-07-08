@@ -1,6 +1,6 @@
 {
   "name": "@hebcal/po2catalog",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "Generate Go golang.org/x/text message catalogues from Hebcal gettext .po files",
   "type": "module",
   "repository": {
