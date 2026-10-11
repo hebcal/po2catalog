@@ -25,14 +25,14 @@
     "gettext-parser": "^9.1.1"
   },
   "devDependencies": {
-    "@hebcal/core": "^6.13.1",
-    "@hebcal/hdate": "^0.23.0",
+    "@hebcal/core": "^6.14.1",
+    "@hebcal/hdate": "^0.23.1",
     "@hebcal/learning": "^6.12.0",
     "@hebcal/leyning": "^10.1.0",
     "@hebcal/locales": "^6.5.3",
     "@hebcal/rest-api": "^7.3.1",
     "@types/gettext-parser": "^9.0.0",
-    "@types/node": "^26.6.4",
+    "@types/node": "^26.6.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
